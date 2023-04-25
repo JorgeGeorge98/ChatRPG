@@ -8,19 +8,31 @@ openai.api_key = environ["OPENAI_API_KEY"]
 
 
 @app.route("/", methods=("GET", "POST"))
+#def index():
+#    if request.method == "POST":
+#        animal = request.form["animal"]
+#        response = openai.Completion.create(
+#            model="text-davinci-003",
+#            prompt=generate_prompt(animal),
+#            temperature=1,
+#        )
+#        return redirect(url_for("index", result=response.choices[0].text))
+
+#    result = request.args.get("result")
+#    return render_template("index.html", result=result)
+
 def index():
     if request.method == "POST":
         animal = request.form["animal"]
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            prompt=generate_prompt(animal),
-            temperature=0.6,
+        response = openai.Image.create(
+            prompt="",
+            n=1,
+            size="256x256"
         )
-        return redirect(url_for("index", result=response.choices[0].text))
+        return redirect(url_for("index", result=response['data'][0]['url']))
 
     result = request.args.get("result")
     return render_template("index.html", result=result)
-
 
 def generate_prompt(animal):
     return """Suggest three names for an animal that is a superhero.
@@ -33,20 +45,5 @@ Animal: {}
 Names:""".format(
         animal.capitalize()
     )
-
-
-
-#def index():
-#    if request.method == "POST":
-#        animal = request.form["animal"]
-#        response = openai.Image.create(
-#            prompt=generate_prompt(animal),
-#            n=1,
-#            size="1024x1024"
-#        )
-#        return redirect(url_for("index", result=response['data'][0]['url']))
-
-#    result = request.args.get("result")
-#    return render_template("index.html", result=result)
 
 
