@@ -1,23 +1,34 @@
+/* Fuentes */
 @font-face {
-  font-family: "ColfaxAI";
-  src: url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff2)
-      format("woff2"),
-    url(https://cdn.openai.com/API/fonts/ColfaxAIRegular.woff) format("woff");
-  font-weight: normal;
-  font-style: normal;
+  font-family: fantasiaFont;
+  src: url(fonts/fantasiaFont.ttf);
 }
 @font-face {
-  font-family: "ColfaxAI";
-  src: url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff2) format("woff2"),
-    url(https://cdn.openai.com/API/fonts/ColfaxAIBold.woff) format("woff");
-  font-weight: bold;
-  font-style: normal;
+  font-family: scifiFont;
+  src: url(fonts/Paladins3D-1Kwg.otf);
 }
+@font-face {
+  font-family: terrorFont;
+  src: url(fonts/TheBashSingingSlashy-OVdmd.otf);
+}
+@font-face {
+  font-family: historicoFont;
+  src: url(fonts/InkPen.otf);
+}
+@font-face {
+  font-family: postapoFont;
+  src: url(fonts/apocalypse.regular.ttf);
+}
+@font-face {
+  font-family: misterioFont;
+  src: url(fonts/Mistery.otf);
+}
+/* ---- */
 body,
 input {
   font-size: 16px;
   line-height: 24px;
-  color: #353740;
+  color: #27282d;
   font-family: "ColfaxAI", Helvetica, sans-serif;
 }
 body {
@@ -25,17 +36,43 @@ body {
   flex-direction: column;
   align-items: center;
   padding-top: 60px;
+  background-image: url(media/4k-3645263.jpg);
+  background-repeat: no-repeat;
+  background-attachment: fixed; 
+  background-size: 100% 100%;
+}
+.contenido{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;  
+  flex-direction: column;
 }
 .icon {
   height: 100px;
   width: 100px;
 }
-h3 {
-  font-size: 32px;
+h3{
+  font-family: fantasiaFont;
+  font-size: 80px;
   line-height: 40px;
   font-weight: bold;
-  color: #202123;
+  color: gold;
   margin: 16px 0 40px;
+  text-shadow: 
+  -1px -1px 0 black,  
+   1px -1px 0 black,
+   -1px 1px 0 black,
+    1px 1px 0 black;
+}
+.tituloFontChange {
+  font-family: fantasiaFont;
+  font-size: 80px;
+  font-weight: bold;
+  animation-name: fontChange;
+  animation-duration: 12s;
+  animation-iteration-count: infinite;
+  animation-timing-function: steps(1);
 }
 form {
   display: flex;
@@ -44,7 +81,7 @@ form {
 }
 input[type="text"] {
   padding: 12px 16px;
-  border: 1px solid #10a37f;
+  border: 1px solid black;
   border-radius: 4px;
   margin-bottom: 24px;
 }
@@ -53,15 +90,112 @@ input[type="text"] {
   opacity: 1;
 }
 input[type="submit"] {
-  padding: 12px 0;
-  color: #fff;
-  background-color: #10a37f;
+  font-weight: bold;
+  margin: 5px;
+  padding: 12px;
+  color: black;
+  background-color: gold;
+  border: 1px solid black;
+  border-radius: 4px;
+  text-align: center;
+  cursor: pointer;
+}
+input[type="submit"]:hover{
+  border: 3px solid white;
+  color: white;
+}
+.result {
+  display: flex;
+  font-weight: bold;
+  margin-top: 40px;
+  flex-direction: column;
+  align-items: center;
+}
+.resultTexto{
+  color: white;
+  font-size: 18px;
+  width: 500px;
+}
+p{
+  font-size: 30px;
+  font-weight: bold;
+}
+button{
+  font-weight: bold;
+  margin: 5px;
+  padding: 12px;
+  color: black;
+  background-color: gold;
   border: none;
   border-radius: 4px;
   text-align: center;
   cursor: pointer;
 }
-.result {
-  font-weight: bold;
-  margin-top: 40px;
+button:hover{
+  border: 3px solid white;
+  color: white;
+}
+.buttons {
+  display: flex;
+}
+.fantasiaButton{
+  font-family: fantasiaFont;
+  font-size: 20px;
+}
+.scifiButton{
+  font-family: scifiFont;
+  font-size: 14px;
+}
+.terrorButton{
+  font-family: terrorFont;
+  font-size: 20px;
+}
+.historicoButton{
+  font-family: historicoFont;
+  font-size: 20px;
+}
+.postapoButton{
+  font-family: postapoFont;
+  font-size: 20px;
+}
+.misterioButton{
+  font-family: misterioFont;
+  font-size: 20px;
+}
+.imagenCreada{
+  height: 200px;
+  width: 200px;
+}
+/* Keyframes */
+@keyframes fontChange {
+  0% {
+    font-family: fantasiaFont;
+    color: #0f52ba;
+  }
+  16.67% {
+    font-family: scifiFont;
+    color: #00B8FF;
+  }
+  33.33% {
+    font-family: terrorFont;
+    color: #B30E08;
+  }
+  50% {
+    font-family: historicoFont;
+    color: black;
+    font-weight: lighter;
+  }
+  66.67% {
+    font-family: postapoFont;
+    color:#f8f6f6;
+  }
+  83.33% {
+    font-family: misterioFont;
+    color: indigo;
+  }
+  100% {
+    font-family: misterioFont;
+    color: indigo;
+    font-weight: normal;
+  }
 }
