@@ -1,5 +1,7 @@
 1: Crea nueva carpeta y dentro de ella ejecuta : git clone https://github.com/JorgeGeorge98/ProyectoFinal.git
+
 2: Navegar a la respectiva rama
+
 3: Ejecutar
 ```bash
 python -m venv venv
