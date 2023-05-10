@@ -7,13 +7,12 @@
   />
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
 </head>
-
 <body>
   <img src="{{ url_for('static', filename='media/icon.png') }}" class="icon" />
   <h3></h3>
   <form action="/fantasia" method="post">
-    <input type="text" name="name" placeholder="Introduce tu nombre" required />
-    <input class="fantasiaButton" type="submit" value="Generar Historia" />
+    <input type="text" name="userInput" placeholder="{{ 'Introduce tu nombre' if not story_begun else '' }}" required />
+    <input class="fantasiaButton" type="submit" value="{{ 'Generar historia' if not story_begun else 'Continuar' }}" />
   </form>
   {% if result %}
   <div class="result">
@@ -21,4 +20,7 @@
     <p class="resultTexto">{{ result }}</p>
   </div>
   {% endif %}
+  <footer>
+    <p>ChatRPG &copy; 2023</p>
+  </footer>
 </body>
