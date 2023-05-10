@@ -1,5 +1,5 @@
 from os import environ
-import urllib
+from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse, unquote
 import openai
 from flask import Flask, redirect, render_template, request, url_for
 
@@ -7,7 +7,7 @@ app = Flask(__name__)
 openai.api_key = environ["OPENAI_API_KEY"]
 
 story_begun = False
-prompt = ""
+previous_response = ""
 
 @app.route("/", methods=("GET", "POST"))
 def index():
@@ -16,16 +16,17 @@ def index():
 @app.route('/fantasia', methods=("GET", "POST"))
 def fantasia():
     global story_begun
-    global prompt
+    global previous_response
 
     if request.method == "POST":
         userInput = request.form["userInput"]
         response = openai.Completion.create(
             model="text-davinci-003",
             max_tokens=3000,
-            prompt=generate_prompt(userInput, story_begun),
+            prompt=generate_prompt(userInput, story_begun, previous_response),
             temperature=1,
         )
+        previous_response=response.choices[0].text
         imgUrl = openai.Image.create(
             prompt=response.choices[0].text,
             n=1,
@@ -38,19 +39,20 @@ def fantasia():
     result = request.args.get("result")
     imgUrl = request.args.get("imgUrl")
     if imgUrl is not None:
-        decoded_url = urllib.parse.unquote(imgUrl)
+        decoded_url = custom_unquote(imgUrl)
     else:
         decoded_url = None
     
     return render_template("fantasia.html", result=result, imgUrl=decoded_url, story_begun=story_begun)
 
-def generate_prompt(userInput, story_begun):
+def generate_prompt(userInput, story_begun, previous_response = ""):
 
     if story_begun:
-        return """Genera la continuacion de la historia de fantasia de una forma coherente
+        return """Genera la continuacion de la historia de fantasia de una forma coherente a partir de la respuesta del usuario, maximo un parrafo
 
+        Historia: {}
         Respuesta del usuario: {}
-        Continuacion de la historia:""".format(userInput.capitalize())
+        Continuacion de la historia:""".format(previous_response ,userInput.capitalize())
     else:
         return """Comienza una historia de fantasia con el nombre que se introduce
 
@@ -60,3 +62,18 @@ def generate_prompt(userInput, story_begun):
         Historia: Jose se a despertado en una mazmorra encadenado en un traje de cuero BDSM, a Jose le gusta, que hace jose?
         Nombre: {}
         Historia:""".format(userInput.capitalize())
+    
+def custom_unquote(url):
+    parsed_url = urlparse(url)
+    query_params = parse_qsl(parsed_url.query)
+    decoded_query_params = []
+
+    for key, value in query_params:
+        if key == 'sig':
+            value = value.replace('+', '%2B')
+            value = unquote(value)
+        decoded_query_params.append((key, value))
+
+    decoded_query_string = urlencode(decoded_query_params)
+    decoded_url = urlunparse(parsed_url._replace(query=decoded_query_string))
+    return decoded_url
