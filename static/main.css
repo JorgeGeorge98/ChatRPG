@@ -166,6 +166,17 @@ button:hover{
   height: 200px;
   width: 200px;
 }
+footer {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  text-align: center;
+}
+footer p{
+  font-size: 12px;
+  color: white;
+}
 /* Keyframes */
 @keyframes fontChange {
   0% {
