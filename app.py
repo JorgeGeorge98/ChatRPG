@@ -14,6 +14,10 @@ previous_response = ""
 def index():
     return render_template("index.html")
 
+@app.route('/fantasia', methods=("GET",))
+def fantasia():
+    return render_template("fantasia.html")
+
 @app.route('/apiCall', methods=("POST",))
 def apiCall():
     global story_begun
@@ -40,11 +44,6 @@ def apiCall():
         decoded_url = custom_unquote(imgUrl['data'][0]['url'])
     
     return jsonify({"result": response.choices[0].text, "imgUrl": decoded_url})
-
-
-@app.route('/fantasia', methods=("GET",))
-def fantasia():
-    return render_template("fantasia.html")
 
 def generate_prompt(userInput, story_begun, previous_response = ""):
 
