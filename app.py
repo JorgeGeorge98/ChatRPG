@@ -44,17 +44,7 @@ def apiCall():
 
 @app.route('/fantasia', methods=("GET",))
 def fantasia():
-    global story_begun
-    global previous_response
-
-    result = request.args.get("result")
-    imgUrl = request.args.get("imgUrl")
-    if imgUrl is not None:
-        decoded_url = custom_unquote(imgUrl)
-    else:
-        decoded_url = None
-    
-    return render_template("fantasia.html", result=result, imgUrl=decoded_url)
+    return render_template("fantasia.html")
 
 def generate_prompt(userInput, story_begun, previous_response = ""):
 
