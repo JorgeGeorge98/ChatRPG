@@ -10,17 +10,54 @@
 <body>
   <img src="{{ url_for('static', filename='media/icon.png') }}" class="icon" />
   <h3></h3>
-  <form action="/fantasia" method="post">
-    <input type="text" name="userInput" placeholder="{{ 'Introduce tu nombre' if not story_begun else '' }}" required />
-    <input class="fantasiaButton" type="submit" value="{{ 'Generar historia' if not story_begun else 'Continuar' }}" />
+  <form action="/fantasia" method="post" onsubmit="event.preventDefault(); getApiResponse();">
+    <input type="text" name="userInput" id="userInput" placeholder="Introduce tu nombre" required />
+    <input class="fantasiaButton" type="submit" value="Generar historia" />
   </form>
-  {% if result %}
   <div class="result">
-    <img class="imagenCreada" src="{{ imgUrl }}" alt="Imagen Creada">
-    <p class="resultTexto">{{ result }}</p>
-  </div>
-  {% endif %}
+    <div class="imagenCreada" style="display: none;"></div>
+    <p class="resultTexto" style="display: none;"></p>
+    <div class="loading" style="display: none;">
+      <img src="{{ url_for('static', filename='media/loading.gif') }}" alt="Loading...">
+    </div>    
+  </div>  
   <footer>
     <p>ChatRPG &copy; 2023</p>
   </footer>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+  <script>
+    function getApiResponse() {
+      const userInput = $("#userInput").val();
+      $(".resultTexto").hide();
+      $(".imagenCreada").hide();
+      $(".loading").show();
+    
+      $.ajax({
+        url: "/apiCall",
+        type: "POST",
+        data: {
+          userInput: userInput,
+        },
+        success: function(response) {
+          $(".resultTexto").html(response.result);
+          $(".resultTexto").show();
+    
+          if (response.imgUrl) {
+            $(".imagenCreada").html(`<img src="${response.imgUrl}" alt="Generated Image" id="imagen" />`);
+            $(".imagenCreada").show();
+          }
+
+          $(".loading").hide();
+
+          $("#userInput").attr("placeholder", "");
+          $("#userInput").val("");
+          $(".fantasiaButton").val("Continuar");
+        },
+        error: function(error) {
+          console.log("Error:", error);
+        },
+      });
+    }
+    </script>
+    
 </body>

@@ -1,7 +1,8 @@
 from os import environ
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse, unquote
 import openai
-from flask import Flask, redirect, render_template, request, url_for
+from flask import Flask, redirect, render_template, request, url_for, jsonify
+import requests
 
 app = Flask(__name__)
 openai.api_key = environ["OPENAI_API_KEY"]
@@ -13,28 +14,38 @@ previous_response = ""
 def index():
     return render_template("index.html")
 
-@app.route('/fantasia', methods=("GET", "POST"))
-def fantasia():
+@app.route('/apiCall', methods=("POST",))
+def apiCall():
     global story_begun
     global previous_response
 
-    if request.method == "POST":
-        userInput = request.form["userInput"]
-        response = openai.Completion.create(
-            model="text-davinci-003",
-            max_tokens=3000,
-            prompt=generate_prompt(userInput, story_begun, previous_response),
-            temperature=1,
-        )
-        previous_response=response.choices[0].text
-        imgUrl = openai.Image.create(
-            prompt=response.choices[0].text,
-            n=1,
-            size="256x256"
-        )
-        if not story_begun:
-            story_begun = True
-        return redirect(url_for("fantasia", result=response.choices[0].text, imgUrl=imgUrl['data'][0]['url']))
+    userInput = request.form["userInput"]
+    response = openai.Completion.create(
+        model="text-davinci-003",
+        max_tokens=3000,
+        prompt=generate_prompt(userInput, story_begun, previous_response),
+        temperature=1,
+    )
+    previous_response = response.choices[0].text
+    imgUrl = openai.Image.create(
+        prompt=response.choices[0].text,
+        n=1,
+        size="256x256"
+    )
+    if not story_begun:
+        story_begun = True
+    
+    decoded_url = None
+    if imgUrl['data'][0]['url']:
+        decoded_url = custom_unquote(imgUrl['data'][0]['url'])
+    
+    return jsonify({"result": response.choices[0].text, "imgUrl": decoded_url})
+
+
+@app.route('/fantasia', methods=("GET",))
+def fantasia():
+    global story_begun
+    global previous_response
 
     result = request.args.get("result")
     imgUrl = request.args.get("imgUrl")
@@ -43,12 +54,12 @@ def fantasia():
     else:
         decoded_url = None
     
-    return render_template("fantasia.html", result=result, imgUrl=decoded_url, story_begun=story_begun)
+    return render_template("fantasia.html", result=result, imgUrl=decoded_url)
 
 def generate_prompt(userInput, story_begun, previous_response = ""):
 
     if story_begun:
-        return """Genera la continuacion de la historia de fantasia de una forma coherente a partir de la respuesta del usuario, maximo un parrafo
+        return """Genera la continuacion de la historia de fantasia de una forma coherente a partir de la respuesta del usuario, maximo un parrafo que termine de forma abierta para que el usuario pueda seguir la historia
 
         Historia: {}
         Respuesta del usuario: {}
