@@ -4,7 +4,9 @@ import openai
 from flask import Flask, redirect, render_template, request, url_for, jsonify
 
 app = Flask(__name__)
-openai.api_key = os.environ.get('OPENAI_API_KEY')
+openai.api_key = os.environ["OPENAI_API_KEY"]
+#environ["OPENAI_API_KEY"]
+#os.environ.get('OPENAI_API_KEY')
 
 story_begun = False
 previous_response = ""

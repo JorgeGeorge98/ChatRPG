@@ -51,6 +51,17 @@
           $("#userInput").attr("placeholder", "");
           $("#userInput").val("");
           $(".fantasiaButton").val("Continuar");
+
+          if('speechSynthesis' in window){
+            const tts = new SpeechSynthesisUtterance();
+            tts.lang = 'es';
+
+            tts.text = response.result;
+
+            speechSynthesis.speak(tts);
+          } else {
+            alert("Tu navegador no soporta la API de voz");
+          }
         },
         error: function(error) {
           console.log("Error:", error);
