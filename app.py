@@ -1,4 +1,4 @@
-from os import environ
+import os
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse, unquote
 import openai
 from flask import Flask, redirect, render_template, request, url_for, jsonify
