@@ -9,11 +9,6 @@
 </head>
 <body>
   <img src="{{ url_for('static', filename='media/icon.png') }}" class="icon" />
-  <h3></h3>
-  <form action="/fantasia" method="post" onsubmit="event.preventDefault(); getApiResponse();">
-    <input type="text" name="userInput" id="userInput" placeholder="Introduce tu nombre" required />
-    <input class="fantasiaButton" type="submit" value="Generar historia" style="width:325px;"/>
-  </form>
   <div class="result">
     <div class="imagenCreada" style="display: none;"></div>
     <p class="resultTexto" style="display: none;"></p>
@@ -21,6 +16,10 @@
       <img src="{{ url_for('static', filename='media/loading.gif') }}" alt="Loading...">
     </div>    
   </div>  
+  <form action="/fantasia" method="post" onsubmit="event.preventDefault(); getApiResponse();">
+    <input type="text" name="userInput" id="userInput" placeholder="Introduce tu nombre" required />
+    <input class="fantasiaButton" type="submit" value="Generar historia" style="width:325px;"/>
+  </form>
   <footer>
     <p>ChatRPG &copy; 2023</p>
   </footer>
