@@ -12,5 +12,3 @@ build/
 *.egg-info/
 
 .DS_STORE
-
-.env
