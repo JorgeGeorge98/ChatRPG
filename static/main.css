@@ -89,21 +89,6 @@ input[type="text"] {
   color: #8e8ea0;
   opacity: 1;
 }
-input[type="submit"] {
-  font-weight: bold;
-  margin: 5px;
-  padding: 12px;
-  color: black;
-  background-color: gold;
-  border: 1px solid black;
-  border-radius: 4px;
-  text-align: center;
-  cursor: pointer;
-}
-input[type="submit"]:hover{
-  border: 3px solid white;
-  color: white;
-}
 .result {
   display: flex;
   font-weight: bold;
@@ -120,20 +105,57 @@ p{
   font-size: 30px;
   font-weight: bold;
 }
-button{
-  font-weight: bold;
-  margin: 5px;
-  padding: 12px;
+input[type="submit"]{
+  margin: 10px auto;
+  width: 150px;
+  letter-spacing: 2px;
+  border-radius: 8px;
   color: black;
-  background-color: gold;
-  border: none;
-  border-radius: 4px;
+  text-shadow: 0 1px 3px #000;
   text-align: center;
+  padding: 10px 0;
+  background: radial-gradient(circle, #8b0000, #8b0000);
+  border-top: 4px ridge #ffb000;
+  border-left: 4px groove #ffb000;
+  border-right: 4px ridge #ffb000;
+  border-bottom: 4px groove #ffb000;
+  box-shadow: inset 0px 0px 5px 3px rgba(1,1,1,0.3);
+  cursor: pointer;
+}
+input[type="submit"]:hover{
+  background: radial-gradient(circle, #e52b2b, #8b0000);
+  box-shadow: 0px 0 5px 5px rgba(255,255,255,0.2);
+  color: gold;
+}
+input[type="submit"]:active{
+  background: radial-gradient(circle, #ec6a6a, #e52b2b);
+  box-shadow: 0px 0 5px 5px rgba(255,255,255,0.2)
+}
+button{
+  margin: 5px;
+  width: 130px;
+  letter-spacing: 2px;
+  border-radius: 8px;
+  color: black;
+  text-shadow: 0 1px 3px #000;
+  text-align: center;
+  padding: 10px 0;
+  background: radial-gradient(circle, #8b0000, #8b0000);
+  border-top: 4px ridge #ffb000;
+  border-left: 4px groove #ffb000;
+  border-right: 4px ridge #ffb000;
+  border-bottom: 4px groove #ffb000;
+  box-shadow: inset 0px 0px 5px 3px rgba(1,1,1,0.3);
   cursor: pointer;
 }
 button:hover{
-  border: 3px solid white;
-  color: white;
+  background: radial-gradient(circle, #e52b2b, #8b0000);
+  box-shadow: 0px 0 5px 5px rgba(255,255,255,0.2);
+  color: gold;
+}
+button:active{
+  background: radial-gradient(circle, #ec6a6a, #e52b2b);
+  box-shadow: 0px 0 5px 5px rgba(255,255,255,0.2)
 }
 .buttons {
   display: flex;
@@ -144,7 +166,7 @@ button:hover{
 }
 .scifiButton{
   font-family: scifiFont;
-  font-size: 14px;
+  font-size: 12px;
 }
 .terrorButton{
   font-family: terrorFont;
@@ -208,5 +230,52 @@ footer p{
     font-family: misterioFont;
     color: indigo;
     font-weight: normal;
+  }
+}
+
+@keyframes glitch {
+  0% {
+    clip-path: var(--slice-1);
+    transform: translate(-20px, -10px);
+  }
+  10% {
+    clip-path: var(--slice-3);
+    transform: translate(10px, 10px);
+  }
+  20% {
+    clip-path: var(--slice-1);
+    transform: translate(-10px, 10px);
+  }
+  30% {
+    clip-path: var(--slice-3);
+    transform: translate(0px, 5px);
+  }
+  40% {
+    clip-path: var(--slice-2);
+    transform: translate(-5px, 0px);
+  }
+  50% {
+    clip-path: var(--slice-3);
+    transform: translate(5px, 0px);
+  }
+  60% {
+    clip-path: var(--slice-4);
+    transform: translate(5px, 10px);
+  }
+  70% {
+    clip-path: var(--slice-2);
+    transform: translate(-10px, 10px);
+  }
+  80% {
+    clip-path: var(--slice-5);
+    transform: translate(20px, -10px);
+  }
+  90% {
+    clip-path: var(--slice-1);
+    transform: translate(-10px, 0px);
+  }
+  100% {
+    clip-path: var(--slice-1);
+    transform: translate(0);
   }
 }
