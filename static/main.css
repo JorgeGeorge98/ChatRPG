@@ -100,6 +100,14 @@ input[type="text"] {
   color: white;
   font-size: 18px;
   width: 500px;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #3b2b19;
+  border-top: 4px ridge #ffb000;
+  border-left: 4px groove #ffb000;
+  border-right: 4px ridge #ffb000;
+  border-bottom: 4px groove #ffb000;
+  box-shadow: inset 0px 0px 5px 3px rgba(1,1,1,0.3);
 }
 p{
   font-size: 30px;
@@ -189,7 +197,6 @@ button:active{
   width: 200px;
 }
 footer {
-  position: fixed;
   left: 0;
   bottom: 0;
   width: 100%;
