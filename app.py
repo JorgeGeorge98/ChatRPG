@@ -2,10 +2,9 @@ from os import environ
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse, unquote
 import openai
 from flask import Flask, redirect, render_template, request, url_for, jsonify
-import requests
 
 app = Flask(__name__)
-openai.api_key = "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"
+openai.api_key = os.environ.get('OPENAI_API_KEY')
 
 story_begun = False
 previous_response = ""
