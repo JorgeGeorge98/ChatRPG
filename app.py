@@ -5,7 +5,7 @@ from flask import Flask, redirect, render_template, request, url_for, jsonify
 import requests
 
 app = Flask(__name__)
-openai.api_key = environ["OPENAI_API_KEY"]
+openai.api_key = "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"
 
 story_begun = False
 previous_response = ""
