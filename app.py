@@ -160,7 +160,6 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
                 Historia:""".format(userInput.capitalize())
         
         elif clase_boton == "misterioButton":
-            if story_begun:
                  if story_begun:
                     return """Genera la continuación de la historia de misterio de forma coherente a partir de la respuesta del usuario, 
                     máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
