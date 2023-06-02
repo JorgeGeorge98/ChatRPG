@@ -6,6 +6,27 @@
     href="{{ url_for('static', filename='media/icon.png') }}"
   />
   <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}" />
+  <script>
+    function guardarClase(clase){
+      fetch('/guardar', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({clase: clase}),
+      })
+      .then(response => {
+        if (response.ok) {
+          return response.text();
+        }else{
+          throw new Error("Error en la solicitud");
+        }
+      })
+      .then(data => {
+        console.log(data);
+    })
+  }
+  </script>
 </head>
 <body>
   <div class="contenido">
@@ -13,12 +34,12 @@
     <h3>Bienvenido a <span class="tituloFontChange">ChatRPG</span></h3>
     <p>Elige tu viaje:</p><br>
     <div class="buttons">
-      <button class="fantasiaButton" onclick="window.location.href='/fantasia'">Fantasia</button>
-      <button class="scifiButton" onclick="window.location.href='/scifi'">Ciencia Ficcion</button>
-      <button class="terrorButton" onclick="window.location.href='/terror'">Terror</button>
-      <button class="historicoButton" onclick="window.location.href='/historico'">Historico</button>
-      <button class="postapoButton" onclick="window.location.href='/postapo'">Post-Apocaliptico</button>
-      <button class="misterioButton" onclick="window.location.href='/misterio'">Misterio</button>
+      <button class="fantasiaButton" onclick="window.location.href='/fantasia'" onclick = "guardarClase(this.className)">Fantasia</button>
+      <button class="scifiButton" onclick="window.location.href='/scifi'" onclick = "guardarClase(this.className)">Ciencia Ficcion</button>
+      <button class="terrorButton" onclick="window.location.href='/terror'" onclick = "guardarClase(this.className)">Terror</button>
+      <button class="historicoButton" onclick="window.location.href='/historico'" onclick = "guardarClase(this.className)">Historico</button>
+      <button class="postapoButton" onclick="window.location.href='/postapo'" onclick = "guardarClase(this.className)">Post-Apocaliptico</button>
+      <button class="misterioButton" onclick="window.location.href='/misterio'" onclick = "guardarClase(this.className)">Misterio</button>
     </div>
   </div>
   <footer>
