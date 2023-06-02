@@ -2,9 +2,6 @@ import os
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse, unquote
 import openai
 from flask import Flask, redirect, render_template, request, url_for, jsonify
-from elevenlabs import set_api_key, generate, play
-
-set_api_key("88b4052652a2cb594e383c5531fdf0e3")
 
 app = Flask(__name__)
 openai.api_key = os.environ["OPENAI_API_KEY"]
@@ -13,40 +10,52 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 
 story_begun = False
 previous_response = ""
-clase_boton = ""
+genre = ""
 
 @app.route("/", methods=("GET", "POST"))
 def index():
+    global story_begun
+    global genre
+    global previous_response
+    story_begun = False
+    genre = ""
+    previous_response = ""
     return render_template("index.html")
-
-@app.route ('/guardar', methods=("POST",))
-def guardar():
-    global clase_boton
-    data = request.get_json()
-    clase_boton = data['clase']
 
 @app.route('/fantasia', methods=("GET",))
 def fantasia():
+    global genre
+    genre = "fantasia"
     return render_template("fantasia.html")
 
 @app.route('/scifi', methods=("GET",))
 def scifi():
+    global genre
+    genre = "scifi"
     return render_template("scifi.html")
 
 @app.route('/terror', methods=("GET",))
 def terror():
+    global genre
+    genre = "terror"
     return render_template("terror.html")
 
 @app.route('/historico', methods=("GET",))
 def historico():
+    global genre
+    genre = "historico"
     return render_template("historico.html")
 
 @app.route('/postapo', methods=("GET",))
 def postapo():
+    global genre
+    genre = "postapo"
     return render_template("postapo.html")
 
 @app.route('/misterio', methods=("GET",))
 def misterio():
+    global genre
+    genre = "misterio"
     return render_template("misterio.html")
 
 
@@ -54,15 +63,13 @@ def misterio():
 def apiCall():
     global story_begun
     global previous_response
-    
-    
-    
+    global genre
 
     userInput = request.form["userInput"]
     response = openai.Completion.create(
         model="text-davinci-003",
         max_tokens=3000,
-        prompt=generate_prompt(userInput, story_begun, previous_response),
+        prompt=generate_prompt(userInput, story_begun, genre, previous_response),
         temperature=1,
     )
     previous_response = response.choices[0].text
@@ -77,20 +84,11 @@ def apiCall():
     decoded_url = None
     if imgUrl['data'][0]['url']:
         decoded_url = custom_unquote(imgUrl['data'][0]['url'])
-
-    audio = generate(
-        text=response.choices[0].text,
-        voice="Rachel",
-        model='eleven_multilingual_v1'
-    )
-
-    play(audio)
     
     return jsonify({"result": response.choices[0].text, "imgUrl": decoded_url})
 
-def generate_prompt(userInput, story_begun, previous_response = ""):
-    global clase_boton
-    if clase_boton == "fantasiaButton":
+def generate_prompt(userInput, story_begun, genre, previous_response = ""):
+    if genre == "fantasia":
         if story_begun:
             return """Genera la continuacion de la historia de fantasia de una forma coherente a partir de la respuesta del usuario, maximo un parrafo que termine de forma abierta para que el usuario pueda seguir la historia
 
@@ -108,7 +106,7 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
             Nombre: {}
             Historia:""".format(userInput.capitalize())
 
-    elif clase_boton == "terrorButton":
+    elif genre == "terror":
         if story_begun:
                 return """Genera la continuación de la historia de terror de forma coherente a partir de la respuesta del usuario, 
                 máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
@@ -126,7 +124,7 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
                 Nombre: {}
                 Historia:""".format(userInput.capitalize())
         
-    elif clase_boton == "scifiButton":
+    elif genre == "scifi":
         if story_begun:
                 return """Genera la continuación de la historia de ciencia ficción de forma coherente a partir de la respuesta del usuario, 
                 máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
@@ -144,7 +142,7 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
                 Nombre: {}
                 Historia:""".format(userInput.capitalize())
             
-    elif clase_boton == "historicoButton":
+    elif genre == "historico":
         if story_begun:
                 return """Genera la continuación de la historia histórica de forma coherente a partir de la respuesta del usuario, 
                 máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
@@ -160,7 +158,7 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
                 Nombre: {}
                 Historia:""".format(userInput.capitalize())
         
-    elif clase_boton == "postapoButton":
+    elif genre == "postapo":
         if story_begun:
                 return """Genera la continuación de la historia post-apocalíptica de forma coherente a partir de la respuesta del usuario, 
                 máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
@@ -176,7 +174,7 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
                 Nombre: {}
                 Historia:""".format(userInput.capitalize())
         
-    elif clase_boton == "misterioButton":
+    elif genre == "misterio":
                 if story_begun:
                     return """Genera la continuación de la historia de misterio de forma coherente a partir de la respuesta del usuario, 
                     máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
