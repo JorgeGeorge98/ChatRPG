@@ -12,6 +12,7 @@ story_begun = False
 previous_response = ""
 genre = ""
 
+#Plantilla de Index
 @app.route("/", methods=("GET", "POST"))
 def index():
     global story_begun
@@ -22,6 +23,7 @@ def index():
     previous_response = ""
     return render_template("index.html")
 
+#Plantillas de los modos de juego 
 @app.route('/fantasia', methods=("GET",))
 def fantasia():
     global genre
@@ -58,7 +60,7 @@ def misterio():
     genre = "misterio"
     return render_template("misterio.html")
 
-
+# ApiCall, aquí se realiza la lógica de creación de imágenes y texto por la IA
 @app.route('/apiCall', methods=("POST",))
 def apiCall():
     global story_begun
@@ -69,11 +71,11 @@ def apiCall():
     response = openai.Completion.create(
         model="text-davinci-003",
         max_tokens=3000,
-        prompt=generate_prompt(userInput, story_begun, genre, previous_response),
+        prompt=generate_prompt(userInput, story_begun, genre, previous_response), #Generacion de prompt a partir del input de usuario
         temperature=1,
     )
     previous_response = response.choices[0].text
-    imgUrl = openai.Image.create(
+    imgUrl = openai.Image.create(   #Generacion de imagen
         prompt=response.choices[0].text,
         n=1,
         size="256x256"
@@ -87,6 +89,7 @@ def apiCall():
     
     return jsonify({"result": response.choices[0].text, "imgUrl": decoded_url})
 
+#Funcion que comprueba el modo de juego seleccionado y crea las historias a raíz de ahí
 def generate_prompt(userInput, story_begun, genre, previous_response = ""):
     if genre == "fantasia":
         if story_begun:
@@ -191,7 +194,7 @@ def generate_prompt(userInput, story_begun, genre, previous_response = ""):
                     Historia:""".format(userInput.capitalize())
             
 
-
+#Decode de la imagen
 def custom_unquote(url):
     parsed_url = urlparse(url)
     query_params = parse_qsl(parsed_url.query)
