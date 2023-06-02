@@ -10,11 +10,17 @@ openai.api_key = os.environ["OPENAI_API_KEY"]
 
 story_begun = False
 previous_response = ""
+clase_boton = ""
 
 @app.route("/", methods=("GET", "POST"))
 def index():
     return render_template("index.html")
 
+@app.route ('/guardar', methods=("POST",))
+def guardar():
+    global clase_boton
+    data = request.get_json()
+    clase_boton = data['clase']
 
 @app.route('/fantasia', methods=("GET",))
 def fantasia():
@@ -47,6 +53,7 @@ def apiCall():
     global previous_response
     
     
+    
 
     userInput = request.form["userInput"]
     response = openai.Completion.create(
@@ -71,18 +78,17 @@ def apiCall():
     return jsonify({"result": response.choices[0].text, "imgUrl": decoded_url})
 
 def generate_prompt(userInput, story_begun, previous_response = ""):
-
-    def switch(clase_boton):
-        if clase_boton == "fantasiaButton":
-            if story_begun:
-                return """Genera la continuacion de la historia de fantasia de una forma coherente a partir de la respuesta del usuario, maximo un parrafo que termine de forma abierta para que el usuario pueda seguir la historia
+    global clase_boton
+    if clase_boton == "fantasiaButton":
+        if story_begun:
+            return """Genera la continuacion de la historia de fantasia de una forma coherente a partir de la respuesta del usuario, maximo un parrafo que termine de forma abierta para que el usuario pueda seguir la historia
 
                 Historia: {}
                 Respuesta del usuario: {}
                 Continuacion de la historia:""".format(previous_response ,userInput.capitalize())
         
-            else:
-                return """Comienza una historia de fantasia con el nombre que se introduce
+        else:
+            return """Comienza una historia de fantasia con el nombre que se introduce
 
             Nombre: Pepe
             Historia: Pepe caminaba por un bosque encantado cuando encontro a un ogro que le esperaba junto a un árbol, que hace Pepe?
@@ -91,15 +97,15 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
             Nombre: {}
             Historia:""".format(userInput.capitalize())
 
-        elif clase_boton == "terrorButton":
-            if story_begun:
+    elif clase_boton == "terrorButton":
+        if story_begun:
                 return """Genera la continuación de la historia de terror de forma coherente a partir de la respuesta del usuario, 
                 máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
 
                 Historia: {}
                 Respuesta del usuario: {}
                 Continuación de la historia:""".format(previous_response, userInput.capitalize())
-            else:
+        else:
                 return """Comienza una historia de terror con el nombre que se introduce.
 
                 Nombre: Pepe
@@ -109,15 +115,15 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
                 Nombre: {}
                 Historia:""".format(userInput.capitalize())
         
-        elif clase_boton == "scifiButton":
-            if story_begun:
+    elif clase_boton == "scifiButton":
+        if story_begun:
                 return """Genera la continuación de la historia de ciencia ficción de forma coherente a partir de la respuesta del usuario, 
                 máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
 
                 Historia: {}
                 Respuesta del usuario: {}
                 Continuación de la historia:""".format(previous_response, userInput.capitalize())
-            else:
+        else:
                 return """Comienza una historia de ciencia ficción con el nombre que se introduce.
 
                 Nombre: Pepe
@@ -127,14 +133,14 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
                 Nombre: {}
                 Historia:""".format(userInput.capitalize())
             
-        elif clase_boton == "historicoButton":
-            if story_begun:
+    elif clase_boton == "historicoButton":
+        if story_begun:
                 return """Genera la continuación de la historia histórica de forma coherente a partir de la respuesta del usuario, 
                 máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
                 Historia: {}
                 Respuesta del usuario: {}
                 Continuación de la historia:""".format(previous_response, userInput.capitalize())
-            else:
+        else:
                 return """Comienza una historia histórica con el nombre que se introduce.
                 Nombre: Pepe
                 Historia: Pepe se encontraba en medio de una batalla épica en la antigua Roma, rodeado de soldados y el sonido de las espadas chocando, ¿qué hace Pepe?
@@ -143,14 +149,14 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
                 Nombre: {}
                 Historia:""".format(userInput.capitalize())
         
-        elif clase_boton == "postapoButton":
-            if story_begun:
+    elif clase_boton == "postapoButton":
+        if story_begun:
                 return """Genera la continuación de la historia post-apocalíptica de forma coherente a partir de la respuesta del usuario, 
                 máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
                 Historia: {}
                 Respuesta del usuario: {}
                 Continuación de la historia:""".format(previous_response, userInput.capitalize())
-            else:
+        else:
                  return """Comienza una historia post-apocalíptica con el nombre que se introduce.
                 Nombre: Pepe
                 Historia: Pepe despertó en un mundo devastado por un cataclismo nuclear, rodeado de ruinas y desolación, ¿qué hace Pepe para sobrevivir?
@@ -159,14 +165,14 @@ def generate_prompt(userInput, story_begun, previous_response = ""):
                 Nombre: {}
                 Historia:""".format(userInput.capitalize())
         
-        elif clase_boton == "misterioButton":
-                 if story_begun:
+    elif clase_boton == "misterioButton":
+                if story_begun:
                     return """Genera la continuación de la historia de misterio de forma coherente a partir de la respuesta del usuario, 
                     máximo un párrafo que termine de forma abierta para que el usuario pueda seguir la historia.
                     Historia: {}
                     Respuesta del usuario: {}
                     Continuación de la historia:""".format(previous_response, userInput.capitalize())
-                 else:
+                else:
                      return """Comienza una historia de misterio con el nombre que se introduce.
                     Nombre: Pepe
                     Historia: Pepe se encontró con un sobre misterioso en la puerta de su casa, dentro había una fotografía antigua y una nota enigmática, ¿qué hace Pepe para descubrir el secreto oculto?
