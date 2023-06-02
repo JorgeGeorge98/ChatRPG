@@ -2,9 +2,12 @@ import os
 from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse, unquote
 import openai
 from flask import Flask, redirect, render_template, request, url_for, jsonify
+from elevenlabs import set_api_key, generate, play
+
+set_api_key("88b4052652a2cb594e383c5531fdf0e3")
 
 app = Flask(__name__)
-openai.api_key = os.environ.get('OPENAI_API_KEY')
+openai.api_key = os.environ["OPENAI_API_KEY"]
 #os.environ["OPENAI_API_KEY"]
 #os.environ.get('OPENAI_API_KEY')
 
@@ -43,6 +46,14 @@ def apiCall():
     decoded_url = None
     if imgUrl['data'][0]['url']:
         decoded_url = custom_unquote(imgUrl['data'][0]['url'])
+
+    audio = generate(
+        text=response.choices[0].text,
+        voice="Rachel",
+        model='eleven_multilingual_v1'
+    )
+
+    play(audio)
     
     return jsonify({"result": response.choices[0].text, "imgUrl": decoded_url})
 
