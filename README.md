@@ -1,3 +1,5 @@
+Pasos para ejecutar la aplicacion (es necesaria una API key de OpenAI)
+
 1: Crea nueva carpeta y dentro de ella ejecuta : git clone https://github.com/JorgeGeorge98/ProyectoFinal.git
 
 2: Navegar a la respectiva rama
